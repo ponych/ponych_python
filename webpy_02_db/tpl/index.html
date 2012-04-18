@@ -1,0 +1,19 @@
+$def with(todos)
+
+<html>
+	<head>
+		<meta http-equv="content-type" content="text/html;charset=utf-8" />
+		<title>My todo List</title>
+	</head>
+<body>
+<ul>
+$for todo in todos:
+  <li id="t_$todo.id">$todo.title</li>
+</ul>
+<form action="/add" method="post">
+	<p><label>Title</label><input type="text" name="title" /></p>
+	<input type="submit" value="add" />
+</form>
+
+</body>
+</html>
