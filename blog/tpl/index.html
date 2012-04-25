@@ -1,0 +1,9 @@
+$def with(posts)
+
+<h1>Blog posts</h1>
+
+$for post in posts:
+    <li><a href="/view/$post.id">$post.title</a>
+    @$datestr(post.posted_on)
+    <a href="/edit/$post.id">Edit</a>
+</li>
