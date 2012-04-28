@@ -52,7 +52,7 @@ def render_template(template_name ,**context):
     extensions = context.pop('extensions', [])
     globals = context.pop('globals', [])
 
-    render_jinja = Environment(
+    jinja_env = Environment(
         loader = FileSystemLoader(os.path.join(os.path.dirname(__file__),'tpl')),
         extensions=extensions
     )

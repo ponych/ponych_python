@@ -152,7 +152,7 @@ class Comment(Base):
         return "<Comment (%s)>" % str(self.id)
 
     def get_absolute_url(self):
-        return self.post.get_absolute_url+("#comment-%d" % self.id)
+        return self.post.get_absolute_url()+("#comment-%d" % self.id)
 
 class Option(Base):
     """ options for this blog """
@@ -195,8 +195,9 @@ def init_db():
 
 
 if __name__ == '__main__':
-    Base.metadata.create_all(engine)
-    init_db()
+    Base.metadata.drop_all(engine) # delete tables before
+    Base.metadata.create_all(engine) # create all tables
+    init_db() # init data
 
         
 

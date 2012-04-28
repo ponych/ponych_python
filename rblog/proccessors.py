@@ -4,7 +4,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from models import engine
 
 def load_sqla(handler):
-    web.ctx.org = scoped_session(sessionmaker(bind=engine))
+    web.ctx.orm = scoped_session(sessionmaker(bind=engine))
     try:
         return handler()
     except web.HTTPError:

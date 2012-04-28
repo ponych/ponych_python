@@ -2,16 +2,17 @@
 #3main.py
 import web
 #import admin
-from controllers import *
+#from controllers import *
 from proccessors import load_sqla
-
+from controllers import *
 urls = (
-    '/(.*)', 'redirect',
+    # '/(.*)', 'redirect',
     '/', 'index',
-    'tag/([-\w])', 'tag',
-    '/category/([-\w+])', 'category',
-    '/search', 'search',
-    '([-\w]+)','singlepost',
+#    'tag/([-\w])', 'tag',
+#    '/category/([-\w+])', 'category',
+#    '/search', 'search',
+ #   '([-\w]+)','singlepost',
+    '/archive/([-\w]+)' , "singlepost"
 )
 
 app = web.application(urls,globals(), autoreload=True)
@@ -30,8 +31,17 @@ else:
 def session_hook():
     web.ctx.session = session
 
-app.add_proccessor(load_sqla)
-app.add_proccessor(web.loadhook(session_hook))
+class redirect:
+    """docstring for redirect"""
+    def GET(self, path):
+        web.seeother('/'+path)
+        
+
+app.add_processor(load_sqla)
+app.add_processor(web.loadhook(session_hook))
+
+# can be customize
+app.notfound = notfound
 
 if __name__ == '__main__':
     app.run()
