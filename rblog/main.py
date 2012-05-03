@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 #3main.py
 import web
-#import admin
+import admin
 #from controllers import *
 from proccessors import load_sqla
 from controllers import *
+
 urls = (
     # '/(.*)', 'redirect',
     '/', 'index',
+    '/admin' ,admin.app_admin,
 #    'tag/([-\w])', 'tag',
 #    '/category/([-\w+])', 'category',
 #    '/search', 'search',

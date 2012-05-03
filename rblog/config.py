@@ -1,7 +1,7 @@
 # config.py
 
 __all__ = [
-    "POST_PER_PAGE", "ADMNI_POST_PER_PAGE", "ADMIN_COMMENT_PER_PAGE",
+    "POST_PER_PAGE", "ADMIN_POST_PER_PAGE", "ADMIN_COMMENT_PER_PAGE",
     "render", "admin_render" ,
     "render_template"
 ]
@@ -13,7 +13,7 @@ from web.contrib.template import render_jinja
 from jinja2 import Environment, FileSystemLoader
 
 POST_PER_PAGE           = 5
-ADMNI_POST_PER_PAGE     = 7
+ADMIN_POST_PER_PAGE     = 7
 ADMIN_COMMENT_PER_PAGE  = 9
 
 cgi.maxlen = 5 * 1024 * 1024 # POST maxlen 5M
@@ -28,7 +28,7 @@ def getRender():
 
 def getAdminRender():
     render = render_jinja(
-        'tppl/admin',
+        'tpl/admin',
         encoding = 'utf-8'
     )
 
