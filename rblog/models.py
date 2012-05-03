@@ -48,7 +48,7 @@ class Post(Base):
         backref=backref('posts',lazy='dynamic'))
 
     def __repr__(self):
-        return "<Post (%s)>" % str(self.id)
+        return "<Post (%d)>" % str(self.id)
 
     def get_absolute_url(self):
         if self.slug:

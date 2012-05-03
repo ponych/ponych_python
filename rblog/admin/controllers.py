@@ -125,15 +125,26 @@ class allposts(object):
         context = {'page': page}
 
 
-        query = web.ctx.orm.query(Post.content_type=="post")
+        query = web.ctx.orm.query(Post).filter(Post.content_type=="post")
 
         if i.get('status',''):
             query = query.filter(Post.status==i.status)
             context['status'] = i.status
         
-        posts = query.order_by('')
+        post_count = query.count()
 
-        context['posts'] = posts
+        posts = query.order_by('posts.created DESC').all()
+
+        page_count = max( post_count / ADMIN_POST_PER_PAGE ,1)
+
+        context['posts'] = posts[(page-1)*ADMIN_POST_PER_PAGE:ADMIN_POST_PER_PAGE*page]
+        context['all_count'] = self.all_count()
+        context['page_count'] = page_count
+        context['publish_count'] = self.pub_count()
+        context['draft_count'] = web.ctx.orm.query(Post).filter(Post.status=='draft').count()
+        context['categories']   = web.ctx.orm.query(Term).filter(Term.type=='category').all()
+        context['archives'] = archives()
+
 
         return admin_render.posts(**context)
 
