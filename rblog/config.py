@@ -13,7 +13,7 @@ from web.contrib.template import render_jinja
 from jinja2 import Environment, FileSystemLoader
 
 POST_PER_PAGE           = 5
-ADMIN_POST_PER_PAGE     = 7
+ADMIN_POST_PER_PAGE     = 4
 ADMIN_COMMENT_PER_PAGE  = 9
 
 cgi.maxlen = 5 * 1024 * 1024 # POST maxlen 5M

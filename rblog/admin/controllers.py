@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 #controllers.py
-
+#import math
 import web
 import hashlib
 from datetime import datetime
@@ -135,7 +135,10 @@ class allposts(object):
 
         posts = query.order_by('posts.created DESC').all()
 
-        page_count = max( post_count / ADMIN_POST_PER_PAGE ,1)
+        page_count = max( post_count / ADMIN_POST_PER_PAGE ,0)
+
+        if post_count % ADMIN_POST_PER_PAGE > 0: # for not same
+            page_count +=1
 
         context['posts'] = posts[(page-1)*ADMIN_POST_PER_PAGE:ADMIN_POST_PER_PAGE*page]
         context['all_count'] = self.all_count()
