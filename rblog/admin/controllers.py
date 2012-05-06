@@ -67,11 +67,11 @@ class index(object):
 
         context['post_count'] = web.ctx.orm.query(Post).\
                                             filter(Post.content_type=="post").count()
-        # context['comment_count'] = web.ctx.orm.query(Comment).count()
+        context['comment_count'] = web.ctx.orm.query(Comment).count()
         # # context['spam_count']
         # context['category_count']   = web.ctx.orm.query(Term).filter(Term.type=='category')
         # context['tag_count'] = web.ctx.orm.query(Term).filter(Term.type=='tag')
-        # context['recent_comments'] = web.ctx.orm.query(Comment).order_by('comments.created DESC').all[:5]
+        context['recent_comments'] = web.ctx.orm.query(Comment).order_by('comments.created DESC').all()[:5]
 
         return admin_render.index(**context)
 
@@ -153,10 +153,16 @@ class allposts(object):
 
 class addpost(object):
     """docstring for addpost"""
+    def get_admin(self):
+        id = web.ctx.session.id
+        return web.ctx.orm.query(User).filter(User.id==id).first()
+    def get_categories(self):
+        return web.ctx.orm.query(Term).filter(Term.type=='category').all()
+
     @login_required
     def GET(self):
-        cates = web.ctx.orm.query(Term).filter(Term.type='category').all()
-        return admin_render.addpost(cates =cates, action='add', content_type='post')
+        cates = web.ctx.orm.query(Term).filter(Term.type=='category').all()
+        return admin_render.post(cates =cates, action='add', content_type='post')
     
     @login_required
     def POST(self):
@@ -168,7 +174,54 @@ class addpost(object):
 
         excerpt = i.excerpt
         tags = i.tags
+        category_ids = i.category
+        comment_status = 0
+        if i.get('comment_status','') == 'open' :
+            comment_status = 1
+
+        if i.get('publish'):
+            status = 'publish'
+
+        # create a dict for a category, add a attribute name 'selected'
+        def newcategory(cate):
+            return {"id":cate.id,"name": cate.name, "slug": cate.slug, selected: cate.id in category_ids}
+
+        if not (title and content):
+            msg = "Post not saved! Title and content can not be empty,plz fill them"
+            return admin_render.post(post=post, 
+                                    cates=map(newcategory, self.get_category),
+                                    tags = tags, action="add",content_type="post",msg=msg)
+
+        post.author = self.get_admin
+
+        web.ctx.orm.commit()
+
+        categories = web.ctx.orm.query(Term).filter(Term.type=='category').\
+                                             filter(Term.id.in_(category_ids)).all()
+
+        for cate in categories:
+            cate.count += 1
+            post.terms.append(cate)
+
+        for item in tags.split(','):
+            tag = web.ctx.orm.query(Term).filter(Term.type=="tag").filter(Term.name==item.strip()).first()
+            # if tag not exists yet
+            if not tag:
+                tag = Term(name=item.strip(),count=0, type="tag")
+                web.ctx.orm.add(tag)
+            tag.count += 1
+            post.terms.add(tag)
+        web.ctx.org.commit()
+
+        if status=='publish':
+            web.ctx.msg = "the post '%s' has been published" % post.title
+        else:
+            web.ctx.msg = "the post '%s' has been saved!" % post.title
+
+        raise web.seeother("/posts")
         
+
+
 
 
 
