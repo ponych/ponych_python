@@ -153,9 +153,21 @@ class allposts(object):
 
 class addpost(object):
     """docstring for addpost"""
-    def function():
-        
-        return admin_render.addpost()
+    @login_required
+    def GET(self):
+        cates = web.ctx.orm.query(Term).filter(Term.type='category').all()
+        return admin_render.addpost(cates =cates, action='add', content_type='post')
+    
+    @login_required
+    def POST(self):
+        i = web.input(category=[])
+        title = i.title
+        slug = None
+        if i.slug.strip():
+            slug = i.slug.strip().replace(' ','-')
+
+        excerpt = i.excerpt
+        tags = i.tags
         
 
 
