@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <title>{% block title %}{% endblock %} - Cblog a wordpress Clone on Flask</title>
+    <link rel="stylesheet" href="{{url_for('static',filename="css/main.css")}}">
+</head>
+<body>
+<div id="page" class="hfeed">
+    {% block content %}
+
+    {% endblock %}
+</div>
+<script type="text/javascript" src="{{url_for('static',filename="js/jquery-1.7.2.js")}}"></script>
+</body>
+</html>
