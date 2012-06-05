@@ -5,6 +5,12 @@
     <title></title>
 </head>
 <body>
-
+<form action="{{url_for('frontend.login')}}" method="post">
+    <label for="email">email</label>
+    <input type="text" name="email" id="email" />
+    <label for="password">password</label>
+    <input type="password" name="password" id="password" /><br/>
+    <input type="submit" />
+</form>
 </body>
 </html>
