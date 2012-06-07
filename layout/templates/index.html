@@ -2,9 +2,13 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title></title>
+    <title>index</title>
 </head>
 <body>
-
+index page
+{% if user %}
+hi,{{user.nick}}<a href="{{url_for('frontend.home',id=user.id)}}">Home</a>
+|<a href="{{url_for('frontend.logout')}}">logout</a>
+{% endif %}
 </body>
 </html>
